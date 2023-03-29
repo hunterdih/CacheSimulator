@@ -10,7 +10,7 @@ if __name__ == '__main__':
     l2_miss_rate = []
     l2_hit_rate = []
     test_format_list = []
-    l1_cache_assoc = [1, 'CA']
+    l1_cache_assoc = [1, 'CA', 'CALRU']
     l1_cache_sizes = [2, 4]
     l2_cache_assoc = [2, 4]
     l2_cache_sizes = [8]
@@ -30,16 +30,14 @@ if __name__ == '__main__':
                     if l1_assoc == 'CA':
                         cachel1 = column_associative_cache.ColumnCache(cache_size=l1_size, block_size=32, cache_level='l1')
                     elif l1_assoc == 'CALRU':
-                        print(f'CALRU NOT FOUND, DEFAULTING TO CA')
-                        cachel1 = column_associative_cache.ColumnCache(cache_size=l1_size, block_size=32, cache_level='l1')
+                        cachel1 = column_associative_cache.LRUColumnCache2(cache_size=l1_size, block_size=32, cache_level='l1')
                     else:
                         cachel1 = mapped_caches.MappedCache(associativity=l1_assoc, cache_size=l1_size, block_size=32, cache_level='l1')
 
                     if l2_assoc == 'CA':
                         cachel2 = column_associative_cache.ColumnCache(cache_size=l2_size, block_size=64, cache_level='l2')
                     elif l2_assoc == 'CALRU':
-                        print(f'CALRU NOT FOUND, DEFAULTING TO CA')
-                        cachel2 = column_associative_cache.ColumnCache(cache_size=l2_size, block_size=64, cache_level='l2')
+                        cachel2 = column_associative_cache.LRUColumnCache2(cache_size=l2_size, block_size=64, cache_level='l2')
                     else:
                         cachel2 = mapped_caches.MappedCache(associativity=l2_assoc, cache_size=l2_size, block_size=64, cache_level='l2')
 
