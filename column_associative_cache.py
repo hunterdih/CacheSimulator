@@ -143,7 +143,7 @@ class LRUColumnCache2:
 
         return self.hit_total / self.instr_count, self.miss_total / self.instr_count
 
-    def process_address(self, type, input_address):
+    def process_address(self, input_address):
         self.instr_count += 1  # Update the instruction count
         block_size = len(bin(self.block_size)) - 2  # -2 for byte addressing
 

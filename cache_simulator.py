@@ -14,9 +14,11 @@ if __name__ == '__main__':
     l1_cache_sizes = [2, 4]
     l2_cache_assoc = [2, 4]
     l2_cache_sizes = [8]
+    l1_block_size = 32
+    l2_block_size = 64
 
-    # address_stream_path = r'D:\Classes\ComputerArchitecture\FinalProject\linpack_address_trace_use.out'
-    address_stream_path = r'C:\Users\David Hunter\Desktop\tracefile\trace'
+    #address_stream_path = r'D:\Classes\ComputerArchitecture\FinalProject\linpack_address_trace_use.out'
+    address_stream_path = r'C:\Users\David Hunter\Desktop\Traces\sodoku_trace_use.out'
     dataset = pd.read_csv(address_stream_path, delimiter=' ')
     dataset = dataset[dataset.columns[0:2]]
     dataset.columns = ['type', 'element']
@@ -28,18 +30,18 @@ if __name__ == '__main__':
                 for l2_size in l2_cache_sizes:
 
                     if l1_assoc == 'CA':
-                        cachel1 = column_associative_cache.ColumnCache(cache_size=l1_size, block_size=32, cache_level='l1')
+                        cachel1 = column_associative_cache.ColumnCache(cache_size=l1_size, block_size=l1_block_size, cache_level='l1')
                     elif l1_assoc == 'CALRU':
-                        cachel1 = column_associative_cache.LRUColumnCache2(cache_size=l1_size, block_size=32, cache_level='l1')
+                        cachel1 = column_associative_cache.LRUColumnCache2(cache_size=l1_size, block_size=l1_block_size, cache_level='l1')
                     else:
-                        cachel1 = mapped_caches.MappedCache(associativity=l1_assoc, cache_size=l1_size, block_size=32, cache_level='l1')
+                        cachel1 = mapped_caches.MappedCache(associativity=l1_assoc, cache_size=l1_size, block_size=l1_block_size, cache_level='l1')
 
                     if l2_assoc == 'CA':
-                        cachel2 = column_associative_cache.ColumnCache(cache_size=l2_size, block_size=64, cache_level='l2')
+                        cachel2 = column_associative_cache.ColumnCache(cache_size=l2_size, block_size=l2_block_size, cache_level='l2')
                     elif l2_assoc == 'CALRU':
-                        cachel2 = column_associative_cache.LRUColumnCache2(cache_size=l2_size, block_size=64, cache_level='l2')
+                        cachel2 = column_associative_cache.LRUColumnCache2(cache_size=l2_size, block_size=l2_block_size, cache_level='l2')
                     else:
-                        cachel2 = mapped_caches.MappedCache(associativity=l2_assoc, cache_size=l2_size, block_size=64, cache_level='l2')
+                        cachel2 = mapped_caches.MappedCache(associativity=l2_assoc, cache_size=l2_size, block_size=l2_block_size, cache_level='l2')
 
                     print(f'Running Test: {l1_assoc=} {l1_size=}, {l2_assoc=} {l2_size=}...')
                     address_count = 0
@@ -47,10 +49,10 @@ if __name__ == '__main__':
                         if address_count % 10000 == 0:
                             print(f'{address_count=}')
                         address_count += 1
-                        result = cachel1.process_address(type=element[0], input_address=element[1])
+                        result = cachel1.process_address(input_address=element[1])
 
                         if result == 'miss':  # Check L2, if not there update
-                            cachel2.process_address(type=element[0], input_address=element[1])
+                            cachel2.process_address(input_address=element[1])
 
                     l1_hit, l1_miss = cachel1.print_metrics()
                     l2_hit, l2_miss = cachel2.print_metrics()
