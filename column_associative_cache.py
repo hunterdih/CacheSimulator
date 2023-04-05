@@ -1,6 +1,4 @@
 import pandas as pd
-import numpy as np
-from collections import deque
 
 
 class ColumnCache:
@@ -14,7 +12,8 @@ class ColumnCache:
         self.block_size = block_size
 
         # Program is intended to only model an Data cachel1, so other addresses can be ignored
-        self.column_cache = pd.DataFrame(index=range(int((self.cache_size * 1024) / self.block_size)), columns=range(2))
+        self.column_cache = pd.DataFrame(index=range(int((self.cache_size * 1024) / self.block_size)),
+                                         columns=range(2))
         self.column_cache.columns = ['Tag', 'Rehash']
         self.number_cache_indexes = len(bin(int((self.cache_size * 1024) / self.block_size))) - 2
         self.column_cache['Rehash'] = 1
@@ -121,7 +120,8 @@ class LRUColumnCache2:
         self.block_size = block_size
 
         # Program is intended to only model an Data cachel1, so other addresses can be ignored
-        self.column_cache = pd.DataFrame(index=range(int((self.cache_size * 1024) / self.block_size)), columns=range(2))
+        self.column_cache = pd.DataFrame(index=range(int((self.cache_size * 1024) / self.block_size)),
+                                         columns=range(2))
         self.column_cache.columns = ['Tag', 'Rehash']
         self.number_cache_indexes = len(bin(int((self.cache_size * 1024) / self.block_size))) - 2
         deque_values = 0
@@ -154,7 +154,7 @@ class LRUColumnCache2:
 
         tag = address_block_removed[:-self.number_cache_indexes]  # Tag for cache to memory mapping
         lru_cache_index_bin = address_block_removed[-(self.number_cache_indexes - 2):]
-        lru_cache_index = int(lru_cache_index_bin, 2) - 1 # 1 is subtracted for 0 indexing
+        lru_cache_index = int(lru_cache_index_bin, 2) - 1  # 1 is subtracted for 0 indexing
 
         # Get mru bit from lru cache and use it to calculate the mru_index_int
         mru_index_bin = address_block_removed[-(self.number_cache_indexes - 1):]
@@ -162,7 +162,6 @@ class LRUColumnCache2:
         mru_index_int = int(mru_index_bin, 2)
 
         lru_index_bin = address_block_removed[-(self.number_cache_indexes - 1):]
-
 
         if self.lru_bit_cache[lru_cache_index] == 0:
             lru_index_bin = str(1) + lru_index_bin[1:]
@@ -184,9 +183,11 @@ class LRUColumnCache2:
             self.lru_bit_cache[lru_cache_index] = int(str(lru_index_bin)[0])
             return 'hit'
 
-        else: # Miss detected, overwrite the data in the lru index and update the lru_cache
+        else:  # Miss detected, overwrite the data in the lru index and update the lru_cache
             self.miss_total += 1
             self.column_cache['Tag'][lru_index_int] = tag
 
             self.lru_bit_cache[lru_cache_index] = int(str(lru_index_bin)[0])
             return 'miss'
+
+

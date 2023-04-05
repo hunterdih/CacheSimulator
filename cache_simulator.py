@@ -17,7 +17,6 @@ if __name__ == '__main__':
     l1_block_size = 32
     l2_block_size = 64
 
-    #address_stream_path = r'D:\Classes\ComputerArchitecture\FinalProject\linpack_address_trace_use.out'
     address_stream_path = r'C:\Users\David Hunter\Desktop\Traces\sodoku_trace_use.out'
     dataset = pd.read_csv(address_stream_path, delimiter=' ')
     dataset = dataset[dataset.columns[0:2]]
@@ -30,18 +29,32 @@ if __name__ == '__main__':
                 for l2_size in l2_cache_sizes:
 
                     if l1_assoc == 'CA':
-                        cachel1 = column_associative_cache.ColumnCache(cache_size=l1_size, block_size=l1_block_size, cache_level='l1')
+                        cachel1 = column_associative_cache.ColumnCache(cache_size=l1_size,
+                                                                       block_size=l1_block_size,
+                                                                       cache_level='l1')
                     elif l1_assoc == 'CALRU':
-                        cachel1 = column_associative_cache.LRUColumnCache2(cache_size=l1_size, block_size=l1_block_size, cache_level='l1')
+                        cachel1 = column_associative_cache.LRUColumnCache2(cache_size=l1_size,
+                                                                           block_size=l1_block_size,
+                                                                           cache_level='l1')
                     else:
-                        cachel1 = mapped_caches.MappedCache(associativity=l1_assoc, cache_size=l1_size, block_size=l1_block_size, cache_level='l1')
+                        cachel1 = mapped_caches.MappedCache(associativity=l1_assoc,
+                                                            cache_size=l1_size,
+                                                            block_size=l1_block_size,
+                                                            cache_level='l1')
 
                     if l2_assoc == 'CA':
-                        cachel2 = column_associative_cache.ColumnCache(cache_size=l2_size, block_size=l2_block_size, cache_level='l2')
+                        cachel2 = column_associative_cache.ColumnCache(cache_size=l2_size,
+                                                                       block_size=l2_block_size,
+                                                                       cache_level='l2')
                     elif l2_assoc == 'CALRU':
-                        cachel2 = column_associative_cache.LRUColumnCache2(cache_size=l2_size, block_size=l2_block_size, cache_level='l2')
+                        cachel2 = column_associative_cache.LRUColumnCache2(cache_size=l2_size,
+                                                                           block_size=l2_block_size,
+                                                                           cache_level='l2')
                     else:
-                        cachel2 = mapped_caches.MappedCache(associativity=l2_assoc, cache_size=l2_size, block_size=l2_block_size, cache_level='l2')
+                        cachel2 = mapped_caches.MappedCache(associativity=l2_assoc,
+                                                            cache_size=l2_size,
+                                                            block_size=l2_block_size,
+                                                            cache_level='l2')
 
                     print(f'Running Test: {l1_assoc=} {l1_size=}, {l2_assoc=} {l2_size=}...')
                     address_count = 0
@@ -60,7 +73,10 @@ if __name__ == '__main__':
                     l1_miss_rate.append(l1_miss)
                     l2_hit_rate.append(l2_hit)
                     l2_miss_rate.append(l2_miss)
-                    test_format_list.append('L1: ' + str(l1_assoc) + '-assoc ' + str(l1_size) + 'KB ' + 'L2: ' + str(l2_assoc) + '-assoc ' + str(l2_size) + 'KB')
+                    test_format_list.append('L1: ' + str(l1_assoc) +
+                                            '-assoc ' + str(l1_size) + 'KB ' + 'L2: ' +
+                                            str(l2_assoc) + '-assoc ' +
+                                            str(l2_size) + 'KB')
     ind = np.arange(len(test_format_list))
     width = 0.35
     fig0 = plt.figure(0, figsize=(12, 9))
@@ -86,3 +102,7 @@ if __name__ == '__main__':
     plt.legend((p1[0], p2[0]), ('Hit Rate', 'Miss Rate'))
 
     plt.show()
+
+
+
+
